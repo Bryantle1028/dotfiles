@@ -12,19 +12,33 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 
 "MY PLUGINS"
-"Plugin 'davidhalter/jedi-vim'
-"Plugin 'ervandew/supertab'
+"Autocomplete
 Plugin 'neoclide/coc.nvim'
+"directory F6
 Plugin 'scrooloose/nerdtree'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
+"Theme
 Plugin 'dracula/vim'
+Plugin 'zenorocha/dracula-theme',{'rtp':'vim/'}
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'tpope/vim-fugitive'
-Plugin 'zenorocha/dracula-theme',{'rtp':'vim/'}
+"Syntax checing
 Plugin 'w0rp/ale'
+"Git
 Plugin 'airblade/vim-gitgutter'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+Plugin 'christoomey/vim-conflicted'
+Plugin 'tpope/vim-fugitive'
+"Tagbar F8
 Plugin 'majutsushi/tagbar'
+"Search
+Plugin 'junegunn/fzf.vim'
+Plugin 'blueyed/vim-diminactive'
+Plugin 'jiangmiao/auto-pairs'
+"Golang
+Plugin 'fatih/vim-go'
+"brackets
+Plugin 'tpope/vim-surround'
+
 
 " Start NERDTree on Vim start and focus on edit pane
 "autocmd VimEnter * NERDTree
@@ -35,8 +49,9 @@ nmap <F6> :NERDTreeToggle<CR>
 call vundle#end()            " required
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
+"filetype plugin on"
+set shiftwidth=4
+
 " Brief help
 " :PluginList       - lists configured plugins
 " :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
@@ -49,6 +64,8 @@ let g:SuperTabCrMapping = 1
 
 set number
 syntax on
+"set relative line number
+set rnu
 
 "display 5 lines above/below cuser when scrolling"
 set scrolloff=5
@@ -89,8 +106,6 @@ set autoindent
 "highlight line
 set cul!
 
-"set relative line number
-set rnu
 
 "split below
 set splitbelow
@@ -98,6 +113,14 @@ set splitbelow
 "NerdTree prefs
 "let NerdTreeShowHidden=1
 let NerdTreeIgnore = ['.pyc$']
+
+"Vertsplit
+"highlight VertSplit ctermbg=cyan
+"highlight VertSplit ctermfg=cyan
+"hi VertSplit ctermfg=Cyan ctermbg=Cyan
+highlight VertSplit guibg=Orange guifg=Orange ctermbg=6 ctermfg=0
+set fillchars+=vert:\ 
+highlight ColorColumn ctermbg=0 guibg=DarkGrey
 
 "Highlight function calls
 syntax match pythonFunction /\v[[:alpha:]_.]+\ze(\s?\()/
@@ -121,8 +144,12 @@ let g:airline#extensions#ale#enabled = 1
 "remaps
 inoremap kj <Esc>
 inoremap jk <Esc>
-nmap <tab> <C-w>w
-nmap <S-tab> <C-w><Left>
+"nmap <tab> <C-w>w
+"nmap <S-tab> <C-w><Left>
+nmap <C-h> <C-w>h
+nmap <C-j> <C-w>j
+nmap <C-k> <C-w>k
+nmap <C-l> <C-w>l
 
 "remaps for coc
 inoremap <silent><expr> <TAB>
@@ -144,3 +171,31 @@ set foldlevel=20
 "tagbar
 let g:Tlist_Ctags_Cmd='/usr/local/Cellar/ctags/5.8_1/bin/ctags'
 nmap <F8> :TagbarToggle<CR>
+
+"Javascript
+autocmd FileType javascript setlocal ts=4 sts=4 sw=4
+
+"Paste
+set pastetoggle=<F2>
+
+"FZF
+set rtp+=/usr/local/opt/fzf
+
+"wildmenu
+set wildmenu
+set wildmode=list:longest,full
+
+"vim fugitive customizations
+nnoremap <leader>gd :Gvdiff<CR>
+nnoremap gdh :diffget //2<CR>
+nnoremap gdl :diffget //3<CR>
+
+"diff save stuff
+function! s:DiffWithSaved()
+  let filetype=&ft
+  diffthis
+  vnew | r # | normal! 1Gdd
+  diffthis
+  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
+endfunction
+com! DiffSaved call s:DiffWithSaved()
