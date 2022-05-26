@@ -1,0 +1,21 @@
+alias pip=pip3
+alias python=python3
+
+# docker
+alias dc="docker-compose"
+
+# git
+alias gs='git status'
+alias gc='git add .; git commit -m'
+
+#project shortcuts
+
+# ctags
+# for cpp use ctags *
+alias tagme="ctags -R -f ./.git/tags ."
+
+#cd shortcuts
+alias ..2="cd ../.."
+alias ..3="cd ../../.."
+alias ..4="cd ../../../.."
+alias ..5="cd ../../../../.."
